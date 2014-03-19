@@ -1,0 +1,60 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package multidifuciondeaudio;
+
+/**
+ *
+ * @author Max
+ */
+
+import java.io.*;
+import java.net.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
+
+public class MulticastServer {
+  static public void main(String args[]) {
+     DatagramSocket socket = null;
+     BufferedReader in = null;
+     boolean moreQuotes = true;
+    
+       String archivo = "C:\\tarea\\05 Fluorescent Adolescent.mp3";
+       
+     File file = new File( archivo );
+     Path path = file.toPath();
+     //int tamañoArchivo = ( int )file.length();
+     
+     
+     try {
+        
+        while (true) {
+           
+             for (int i=1; i< 1000; i++) {
+                  socket = new DatagramSocket();
+             InetAddress grupo = InetAddress.getByName("224.2.2.3");
+                 System.out.println(path);
+                  // String dString = i+"--"+(InetAddress.getLocalHost());
+                 
+                   byte[] buf = Files.readAllBytes(path);
+                   
+                   System.out.println("Tamano"+buf.length);
+                  
+	DatagramPacket packet = 
+                   new DatagramPacket(buf,65500, grupo, 4446);
+                    //System.out.println("ENVIE EL PAQUETE"); 
+                   socket.send(packet);
+                      System.out.println("ENVIE EL PAQUETE"); 
+                   try {
+                        Thread.currentThread().sleep(2000); }
+                        catch (InterruptedException e) {System.out.println("Hilo"+ e);}
+                   }
+          }
+       } catch (IOException e) {System.err.println("IO"+e);}
+   }
+}
